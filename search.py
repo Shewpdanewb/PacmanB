@@ -102,6 +102,7 @@ def DFS(problem, state, visited):
     visited.append(state)
 
     print "state:", state
+    print "successors:", problem.getSuccessors(state)
 
     if problem.isGoalState(state):
         return state
