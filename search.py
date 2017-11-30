@@ -90,9 +90,8 @@ def depthFirstSearch(problem):
  
     visited = list()      
     state = problem.getStartState()
-    visited.append(state)
 
-    print "result:", DFS(problem, state, visited), "test"
+    print "result:", DFS(problem, state, visited), "<-- found!"
     #return DFS(problem, state, stack, visited)
     util.raiseNotDefined()
 
@@ -100,17 +99,14 @@ def DFS(problem, state, visited):
     """
     Recursive algorithm for depth first search
     """
-
-    if problem.isGoalState(state):
-        return state
+    visited.append(state)
+    print state
 
     for successor in problem.getSuccessors(state):
         if successor[0] not in visited:
-            visited.append(successor[0])
-            print successor[0]
-            next = DFS(problem, successor[0], visited)
-            if next is not None: return next
-            
+            visited = DFS(problem, successor[0], visited)
+    
+    return visited
     util.raiseNotDefined()
 
 def breadthFirstSearch(problem):
