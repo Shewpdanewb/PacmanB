@@ -107,8 +107,10 @@ def DFS(problem, state, visited):
     for successor in problem.getSuccessors(state):
         if successor[0] not in visited:
             next = DFS(problem, successor[0], visited)
+            print "test:", next
             if next is not None: return next
     
+    print "I shouldnt have made it here"
     util.raiseNotDefined()
 
 def breadthFirstSearch(problem):
