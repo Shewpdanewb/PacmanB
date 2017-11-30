@@ -90,6 +90,7 @@ def depthFirstSearch(problem):
  
     visited = list()      
     state = problem.getStartState()
+    visited.append(state)
 
     print "result:", DFS(problem, state, visited), "test"
     #return DFS(problem, state, stack, visited)
@@ -106,6 +107,7 @@ def DFS(problem, state, visited):
     for successor in problem.getSuccessors(state):
         if successor[0] not in visited:
             visited.append(successor[0])
+            print successor[0]
             next = DFS(problem, successor[0], visited)
             if next is not None: return next
             
