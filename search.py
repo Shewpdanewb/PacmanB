@@ -89,15 +89,16 @@ def depthFirstSearch(problem):
     "*** YOUR CODE HERE ***"
  
     visited = list()
-    pi = dict()
+    directions = dict()
 
     state = problem.getStartState()
 
-    print "result:", DFS(problem, state, visited, pi)
-    #return DFS(problem, state, stack, visited)
+    DFS(problem, state, visited, directions)
+
+    return path[::-1]
     util.raiseNotDefined()
 
-def DFS(problem, state, visited, pi):
+def DFS(problem, state, visited, directions):
     """
     Recursive algorithm for depth first search
     """
@@ -106,17 +107,19 @@ def DFS(problem, state, visited, pi):
 
     for successor in problem.getSuccessors(state):
         if successor[0] not in visited:
-            pi[successor[0]] = state
-            visited = DFS(problem, successor[0], visited, pi)
+            directions[successor[0]] = (state, successor[1])
+            visited = DFS(problem, successor[0], visited, directions)
     
     if problem.isGoalState(state):
-        print state, "found!"
-        print "path:"
-        print state
+        global path
+        path = list()
+
+        print "test:", directions[state]
+
         node_history = state
         while node_history is not problem.getStartState():
-            print pi[node_history]
-            node_history = pi[node_history]
+            path.append(directions[node_history][1])
+            node_history = directions[node_history][0]
     
     return visited
 
