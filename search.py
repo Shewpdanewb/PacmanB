@@ -91,7 +91,8 @@ def depthFirstSearch(problem):
     visited = list()      
     state = problem.getStartState()
 
-    return DFS(problem, state, stack, visited)
+    print "result:", DFS(problem, state, visited), "test"
+    #return DFS(problem, state, stack, visited)
     util.raiseNotDefined()
 
 def DFS(problem, state, visited):
