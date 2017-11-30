@@ -91,7 +91,7 @@ def depthFirstSearch(problem):
     visited = list()      
     state = problem.getStartState()
 
-    print "result:", DFS(problem, state, visited)
+    print "result:", DFS(problem, state, visited), "test"
     #return DFS(problem, state, stack, visited)
     util.raiseNotDefined()
 
@@ -105,12 +105,11 @@ def DFS(problem, state, visited):
         return visited
 
     for successor in problem.getSuccessors(state):
-        if successor[0] not in visited:
-            print "1st:", successor[0]
-            next = DFS(problem, successor[0], visited)
-            if next is not None: 
-                print "2d:", next
-                return next
+        print "1st:", successor[0]
+        next = DFS(problem, successor[0], visited)
+        if next is not None: 
+            print "2d:", next
+            return next
     
     util.raiseNotDefined()
 
