@@ -106,8 +106,11 @@ def DFS(problem, state, visited):
 
     for successor in problem.getSuccessors(state):
         if successor[0] not in visited:
+            print "1st:", successor[0]
             next = DFS(problem, successor[0], visited)
-            if next is not None: return next
+            if next is not None: 
+                print "2d:", next
+                return next
     
     util.raiseNotDefined()
 
