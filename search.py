@@ -88,10 +88,11 @@ def depthFirstSearch(problem):
     """
     "*** YOUR CODE HERE ***"
  
-    visited = list()      
+    visited = list()
+
     state = problem.getStartState()
 
-    print "result:", DFS(problem, state, visited), "<-- found!"
+    print "result:", DFS(problem, state, visited)
     #return DFS(problem, state, stack, visited)
     util.raiseNotDefined()
 
