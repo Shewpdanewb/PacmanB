@@ -101,6 +101,8 @@ def DFS(problem, state, visited):
     """
     visited.append(state)
 
+    print "state:", state
+
     if problem.isGoalState(state):
         return state
 
