@@ -103,7 +103,6 @@ def DFS(problem, state, visited, directions):
     Recursive algorithm for depth first search
     """
     visited.append(state)
-    print state
 
     for successor in problem.getSuccessors(state):
         if successor[0] not in visited:
@@ -113,8 +112,6 @@ def DFS(problem, state, visited, directions):
     if problem.isGoalState(state):
         global path
         path = list()
-
-        print "test:", directions[state]
 
         node_history = state
         while node_history is not problem.getStartState():
