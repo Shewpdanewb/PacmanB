@@ -102,11 +102,10 @@ def DFS(problem, state, visited):
     visited.append(state)
 
     if problem.isGoalState(state):
-        return visited
+        return state
 
     for successor in problem.getSuccessors(state):
         if successor[0] not in visited:
-            print "1st:", successor[0]
             next = DFS(problem, successor[0], visited)
             if next is not None: return next
     
