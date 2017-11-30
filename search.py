@@ -112,6 +112,7 @@ def DFS(problem, state, visited, pi):
     if problem.isGoalState(state):
         print state, "found!"
         print "path:"
+        print state
         node_history = state
         while node_history is not problem.getStartState():
             print pi[node_history]
