@@ -89,58 +89,44 @@ def depthFirstSearch(problem):
     "*** YOUR CODE HERE ***"
  
     visited = list()
-    directions = dict()
-
     stack = util.Stack()
-    stack.push(problem.getStartState())
+    stack.push((problem.getStartState(), []))
 
     while(not stack.isEmpty()):
-        point = stack.pop()
+        point, path = stack.pop()
 
         if problem.isGoalState(point):
-            return generatePath(problem, directions, point)
+            return path
 
         if point not in visited: 
             visited.append(point)
             for successor in problem.getSuccessors(point):
                 if successor[0] not in visited:
-                    directions[successor[0]] = (point, successor[1])
-                    stack.push(successor[0])
+                    new_path = path + [successor[1]]
+                    stack.push((successor[0], new_path))
 
     print "Goal not found!"
-
-def generatePath(problem, directions, point):
-    path = list()
-    node_history = point
-    while node_history is not problem.getStartState():
-        path.append(directions[node_history][1])
-        node_history = directions[node_history][0]
-    return path[::-1]
 
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
 
     visited = list()
-
-    directions = dict()
-
     queue = util.Queue()
-    queue.push(problem.getStartState())
+    queue.push((problem.getStartState(), []))
 
     while(not queue.isEmpty()):
-        point = queue.pop()
+        point, path = queue.pop()
 
         if problem.isGoalState(point):
-            return generatePath(problem, directions, point)
+            return path
 
         if point not in visited:
             visited.append(point)
             for successor in problem.getSuccessors(point):
                 if successor[0] not in visited:
-                    if successor[0] not in directions: 
-                        directions[successor[0]] = (point, successor[1])
-                    queue.push(successor[0])
+                    new_path = path + [successor[1]]
+                    queue.push((successor[0], new_path))
 
     print "Goal not found!"
 
@@ -149,11 +135,8 @@ def uniformCostSearch(problem):
     "*** YOUR CODE HERE ***"
 
     visited = list()
-
     priority_queue = util.PriorityQueue()
-
     priority_queue.push((problem.getStartState(), []), 0)
-    #because the getCostOfActions function requires us to submit a path, we choose a different way than with DFS and BFS to remember the path we took.
 
     while(not priority_queue.isEmpty()):
         point, path = priority_queue.pop()
