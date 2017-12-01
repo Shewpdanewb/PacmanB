@@ -96,26 +96,54 @@ def depthFirstSearch(problem):
 
     while(not stack.isEmpty()):
         point = stack.pop()
+
+        if problem.isGoalState(point):
+            path = list()
+            node_history = point
+            while node_history is not problem.getStartState():
+                path.append(directions[node_history][1])
+                node_history = directions[node_history][0]
+            return path[::-1]
+
         if point not in visited: 
             visited.append(point)
             for successor in problem.getSuccessors(point):
                 if successor[0] not in visited:
                     directions[successor[0]] = (point, successor[1])
                     stack.push(successor[0])
-                    if problem.isGoalState(successor[0]):
-                        path = list()
-                        node_history = successor[0]
-                        while node_history is not problem.getStartState():
-                            path.append(directions[node_history][1])
-                            node_history = directions[node_history][0]
-                        return path[::-1]
 
     print "Goal not found!"
 
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+
+    visited = list()
+    directions = dict()
+
+    queue = util.Queue()
+    queue.push(problem.getStartState())
+
+    while(not queue.isEmpty()):
+        point = queue.pop()
+
+        if problem.isGoalState(point):
+            path = list()
+            node_history = point
+            while node_history is not problem.getStartState():
+                path.append(directions[node_history][1])
+                node_history = directions[node_history][0]
+            return path[::-1]
+
+        if point not in visited:
+            visited.append(point)
+            for successor in problem.getSuccessors(point):
+                if successor[0] not in visited:
+                    if successor[0] not in directions: 
+                        directions[successor[0]] = (point, successor[1])
+                    queue.push(successor[0])
+
+    print "Goal not found!"
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
