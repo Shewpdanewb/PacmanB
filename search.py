@@ -98,8 +98,7 @@ def depthFirstSearch(problem):
         point = stack.pop()
         if point not in visited: 
             visited.append(point)
-            for successor in problem.getSuccessors(point)[::-1]:
-                # inverted search list in order to match autograder's routes.
+            for successor in problem.getSuccessors(point):
                 if successor[0] not in visited:
                     directions[successor[0]] = (point, successor[1])
                     stack.push(successor[0])
