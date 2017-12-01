@@ -149,7 +149,6 @@ def uniformCostSearch(problem):
     "*** YOUR CODE HERE ***"
 
     visited = list()
-    directions = dict()
 
     priority_queue = util.PriorityQueue()
 
