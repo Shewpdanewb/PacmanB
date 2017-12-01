@@ -147,9 +147,6 @@ def breadthFirstSearch(problem):
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
     "*** YOUR CODE HERE ***"
-    
-    #cost = lambda aPath: problem.getCostOfActions([x[1] for x in aPath])
-    #priorityfn_queue = util.PriorityQueueWithFunction(cost)
 
     visited = list()
     directions = dict()
