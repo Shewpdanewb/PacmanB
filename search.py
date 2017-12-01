@@ -154,6 +154,7 @@ def uniformCostSearch(problem):
     priority_queue = util.PriorityQueue()
 
     priority_queue.push((problem.getStartState(), []), 0)
+    #because the getCostOfActions function requires us to submit a path, we choose a different way than with DFS and BFS to remember the path we took.
 
     while(not priority_queue.isEmpty()):
         point, path = priority_queue.pop()
