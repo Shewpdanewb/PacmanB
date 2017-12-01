@@ -98,12 +98,7 @@ def depthFirstSearch(problem):
         point = stack.pop()
 
         if problem.isGoalState(point):
-            path = list()
-            node_history = point
-            while node_history is not problem.getStartState():
-                path.append(directions[node_history][1])
-                node_history = directions[node_history][0]
-            return path[::-1]
+            return generatePath(problem, directions, point)
 
         if point not in visited: 
             visited.append(point)
@@ -114,11 +109,20 @@ def depthFirstSearch(problem):
 
     print "Goal not found!"
 
+def generatePath(problem, directions, point):
+    path = list()
+    node_history = point
+    while node_history is not problem.getStartState():
+        path.append(directions[node_history][1])
+        node_history = directions[node_history][0]
+    return path[::-1]
+
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
 
     visited = list()
+
     directions = dict()
 
     queue = util.Queue()
@@ -128,12 +132,7 @@ def breadthFirstSearch(problem):
         point = queue.pop()
 
         if problem.isGoalState(point):
-            path = list()
-            node_history = point
-            while node_history is not problem.getStartState():
-                path.append(directions[node_history][1])
-                node_history = directions[node_history][0]
-            return path[::-1]
+            return generatePath(problem, directions, point)
 
         if point not in visited:
             visited.append(point)
@@ -148,6 +147,31 @@ def breadthFirstSearch(problem):
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
     "*** YOUR CODE HERE ***"
+    
+    #cost = lambda aPath: problem.getCostOfActions([x[1] for x in aPath])
+    #priorityfn_queue = util.PriorityQueueWithFunction(cost)
+
+    visited = list()
+    directions = dict()
+
+    priority_queue = util.PriorityQueue()
+
+    priority_queue.push((problem.getStartState(), []), 0)
+
+    while(not priority_queue.isEmpty()):
+        point, path = priority_queue.pop()
+
+        if problem.isGoalState(point):
+            return path
+
+        if point not in visited:
+            visited.append(point)
+            for successor in problem.getSuccessors(point):
+                if successor[0] not in visited:
+                    new_path = path + [successor[1]]
+                priority_queue.push((successor[0], new_path), problem.getCostOfActions(new_path))
+
+    print "Goal not found!"
     util.raiseNotDefined()
 
 def nullHeuristic(state, problem=None):
