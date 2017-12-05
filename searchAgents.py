@@ -288,21 +288,27 @@ class CornersProblem(search.SearchProblem):
         # Please add any code here which you would like to use
         # in initializing the problem
         "*** YOUR CODE HERE ***"
+        
+        corners_visited = [False, False, False, False]
+        if self.startingPosition in self.corners:
+			corners_visited[self.corners.index(self.startingPosition)] = True;
+        self.startAndCorners = (self.startingPosition, tuple(corners_visited))
+        self._visited, self._visitedlist = {}, []
 
     def getStartState(self):
         """
         Returns the start state (in your state space, not the full Pacman state
         space)
         """
-        "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        return self.startAndCorners
 
     def isGoalState(self, state):
         """
         Returns whether this search state is a goal state of the problem.
         """
-        "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        isGoal = all(list(state[1]))
+
+        return isGoal
 
     def getSuccessors(self, state):
         """
@@ -325,6 +331,25 @@ class CornersProblem(search.SearchProblem):
             #   hitsWall = self.walls[nextx][nexty]
 
             "*** YOUR CODE HERE ***"
+            x,y = state[0]
+            dx, dy = Actions.directionToVector(action)
+            nextx, nexty = int(x + dx), int(y + dy)
+            if not self.walls[nextx][nexty]:
+                nextState = (nextx, nexty)
+                
+                if nextState in self.corners:
+					tempList = list(state[1])
+					tempList[self.corners.index(nextState)] = True
+                else:
+                    tempList = list(state[1])
+                nextStateAndCorners = nextState, tuple(tempList)
+                
+                successors.append((nextStateAndCorners, action, 1))
+
+        # Bookkeeping for display purposes
+        if state not in self._visited:
+            self._visited[state] = True
+            self._visitedlist.append(state)
 
         self._expanded += 1 # DO NOT CHANGE
         return successors
