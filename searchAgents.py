@@ -288,21 +288,27 @@ class CornersProblem(search.SearchProblem):
         # Please add any code here which you would like to use
         # in initializing the problem
         "*** YOUR CODE HERE ***"
+        
+        corners_visited = [False, False, False, False]
+        if self.startingPosition in self.corners:
+			corners_visited[self.corners.index(self.startingPosition)] = True;
+        self.startAndCorners = (self.startingPosition, tuple(corners_visited))
+        self._visited, self._visitedlist = {}, []
 
     def getStartState(self):
         """
         Returns the start state (in your state space, not the full Pacman state
         space)
         """
-        "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        return self.startAndCorners
 
     def isGoalState(self, state):
         """
         Returns whether this search state is a goal state of the problem.
         """
-        "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        isGoal = all(list(state[1]))
+
+        return isGoal
 
     def getSuccessors(self, state):
         """
@@ -325,6 +331,25 @@ class CornersProblem(search.SearchProblem):
             #   hitsWall = self.walls[nextx][nexty]
 
             "*** YOUR CODE HERE ***"
+            x,y = state[0]
+            dx, dy = Actions.directionToVector(action)
+            nextx, nexty = int(x + dx), int(y + dy)
+            if not self.walls[nextx][nexty]:
+                nextState = (nextx, nexty)
+                
+                if nextState in self.corners:
+					tempList = list(state[1])
+					tempList[self.corners.index(nextState)] = True
+                else:
+                    tempList = list(state[1])
+                nextStateAndCorners = nextState, tuple(tempList)
+                
+                successors.append((nextStateAndCorners, action, 1))
+
+        # Bookkeeping for display purposes
+        if state not in self._visited:
+            self._visited[state] = True
+            self._visitedlist.append(state)
 
         self._expanded += 1 # DO NOT CHANGE
         return successors
@@ -342,6 +367,15 @@ class CornersProblem(search.SearchProblem):
             if self.walls[x][y]: return 999999
         return len(actions)
 
+def min_dist_dots(pos, corners):
+    cornerI = 0
+    mdpl = util.manhattanDistance(pos, corners[0])
+    for i in range(len(corners)):
+        dpl = util.manhattanDistance(pos, corners[i])
+        if mdpl > dpl:
+            mdpl = dpl
+            cornerI = i
+    return cornerI, mdpl
 
 def cornersHeuristic(state, problem):
     """
@@ -360,7 +394,24 @@ def cornersHeuristic(state, problem):
     walls = problem.walls # These are the walls of the maze, as a Grid (game.py)
 
     "*** YOUR CODE HERE ***"
-    return 0 # Default to trivial solution
+    if problem.isGoalState(state):
+        return 0
+        
+    corners_visited = list(state[1])
+    cornersToGo = []
+    for i in range(len(corners)):
+        if not(corners_visited[i]):
+            cornersToGo.append(corners[i])
+    
+    cost = 0
+    tempPos = state[0]
+    while (len(cornersToGo) > 0):
+		i, pathlength = min_dist_dots(tempPos, cornersToGo)
+		cost += pathlength
+		tempPos = cornersToGo[i]
+		cornersToGo.remove(cornersToGo[i])
+    
+    return cost
 
 class AStarCornersAgent(SearchAgent):
     "A SearchAgent for FoodSearchProblem using A* and your foodHeuristic"
@@ -454,7 +505,53 @@ def foodHeuristic(state, problem):
     """
     position, foodGrid = state
     "*** YOUR CODE HERE ***"
-    return 0
+    lijstEten = foodGrid.asList()
+    if (len(lijstEten) == 0):
+		return 0
+    laagstecost = None
+    for eten in range(len(lijstEten)):
+        afstand = euclid(position, lijstEten[eten])
+        if laagstecost == None or laagstecost > afstand:
+			laagstecost = afstand
+	return laagstecost
+	
+    """elif (len(lijstEten) == 1):
+		return euclid(position, lijstEten[0])"""
+    """totaal = 0
+    curpos = position
+    while (len(lijstEten) != 0):
+		laagstenode = 0
+		laagstecost = None
+		for eten in range(len(lijstEten)):
+			afstand = euclid(curpos, lijstEten[eten])
+			if laagstecost == None or laagstecost > afstand:
+				laagstecost = afstand
+				laagstenode = lijstEten[eten]
+		totaal += laagstecost
+		curpos = laagstenode
+		lijstEten.remove(laagstenode)
+    return totaal"""
+    
+    
+    """lijstEten = foodGrid.asList()
+    if (len(lijstEten) == 0):
+		return 0
+    totaal = 0
+    curpos = position
+    while (len(lijstEten) != 0):
+		laagstenode = lijstEten[0]
+		laagstecost = euclid(lijstEten[0], curpos)
+		for eten in lijstEten[1:]:
+			if laagstecost > euclid(curpos, eten):
+				laagstecost = euclid(curpos, eten)
+				laagstenode = eten
+		totaal += laagstecost
+		curpos = laagstenode
+		lijstEten.remove(laagstenode)
+    return totaal"""
+
+def euclid(a, b):
+    return abs(a[0] - b[0])+ abs(a[1] - b[1])
 
 class ClosestDotSearchAgent(SearchAgent):
     "Search for all food using a sequence of searches"
@@ -485,7 +582,8 @@ class ClosestDotSearchAgent(SearchAgent):
         problem = AnyFoodSearchProblem(gameState)
 
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        return search.breadthFirstSearch(problem)
+
 
 class AnyFoodSearchProblem(PositionSearchProblem):
     """
@@ -521,7 +619,9 @@ class AnyFoodSearchProblem(PositionSearchProblem):
         x,y = state
 
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        
+
+        return (state in self.food.asList())
 
 def mazeDistance(point1, point2, gameState):
     """
