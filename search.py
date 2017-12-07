@@ -88,10 +88,11 @@ def depthFirstSearch(problem):
     """
     "*** YOUR CODE HERE ***"
  
-    visited = list()
-    stack = util.Stack()
+    visited = list() # list to keep track where we've been.
+    stack = util.Stack() # needed datastructure for DFS
     stack.push((problem.getStartState(), []))
 
+    # We use the iterative form of DFS.
     while(not stack.isEmpty()):
         point, path = stack.pop()
 
@@ -112,9 +113,10 @@ def breadthFirstSearch(problem):
     "*** YOUR CODE HERE ***"
 
     visited = list()
-    queue = util.Queue()
+    queue = util.Queue() # needed datastructure for BFS
     queue.push((problem.getStartState(), []))
 
+    # We use the iterative form of BFS.
     while(not queue.isEmpty()):
         point, path = queue.pop()
 
@@ -135,9 +137,10 @@ def uniformCostSearch(problem):
     "*** YOUR CODE HERE ***"
 
     visited = list()
-    priority_queue = util.PriorityQueue()
+    priority_queue = util.PriorityQueue() # needed datastructure for UCS
     priority_queue.push((problem.getStartState(), []), 0)
 
+    # We use the iterative form of BFS and tweak it for UCS.
     while(not priority_queue.isEmpty()):
         point, path = priority_queue.pop()
 
@@ -149,10 +152,9 @@ def uniformCostSearch(problem):
             for successor in problem.getSuccessors(point):
                 if successor[0] not in visited:
                     new_path = path + [successor[1]]
-                    priority_queue.push((successor[0], new_path), problem.getCostOfActions(new_path))
+                    priority_queue.push((successor[0], new_path), problem.getCostOfActions(new_path)) # We add a value to our key for the priority queue based on the getCostOfActions function.
 
     print "Goal not found!"
-    util.raiseNotDefined()
 
 def nullHeuristic(state, problem=None):
     """
@@ -164,9 +166,10 @@ def nullHeuristic(state, problem=None):
 def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
     visited = list()
-    priority_queue = util.PriorityQueue()
+    priority_queue = util.PriorityQueue() # needed datastructure for A*
     priority_queue.push((problem.getStartState(), []), 0)
 
+    # We use the same iterative method for UCS and tweak it for A*
     while(not priority_queue.isEmpty()):
         point, path = priority_queue.pop()
 
@@ -178,9 +181,7 @@ def aStarSearch(problem, heuristic=nullHeuristic):
             for successor in problem.getSuccessors(point):
                 if successor[0] not in visited:
                     new_path = path + [successor[1]]
-                    priority_queue.push((successor[0], new_path), heuristic(successor[0], problem) + problem.getCostOfActions(new_path))
-
-    util.raiseNotDefined()
+                    priority_queue.push((successor[0], new_path), heuristic(successor[0], problem) + problem.getCostOfActions(new_path)) # We add a heuristic value to our getCostOfAction value to implement A*
 
 
 # Abbreviations
