@@ -110,7 +110,6 @@ def depthFirstSearch(problem):
 
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
-    "*** YOUR CODE HERE ***"
 
     visited = list()
     queue = util.Queue() # needed datastructure for BFS
@@ -134,7 +133,6 @@ def breadthFirstSearch(problem):
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
-    "*** YOUR CODE HERE ***"
 
     visited = list()
     priority_queue = util.PriorityQueue() # needed datastructure for UCS
@@ -182,7 +180,6 @@ def aStarSearch(problem, heuristic=nullHeuristic):
                 if successor[0] not in visited:
                     new_path = path + [successor[1]]
                     priority_queue.push((successor[0], new_path), heuristic(successor[0], problem) + problem.getCostOfActions(new_path)) # We add a heuristic value to our getCostOfAction value to implement A*
-
 
 # Abbreviations
 bfs = breadthFirstSearch

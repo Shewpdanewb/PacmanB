@@ -337,6 +337,7 @@ class CornersProblem(search.SearchProblem):
             if not self.walls[nextx][nexty]:
                 nextState = (nextx, nexty)
                 
+                #checks if a state is one of the corners and handles the situation
                 if nextState in self.corners:
 					tempList = list(state[1])
 					tempList[self.corners.index(nextState)] = True
@@ -367,14 +368,15 @@ class CornersProblem(search.SearchProblem):
             if self.walls[x][y]: return 999999
         return len(actions)
 
+# calculates the smallest manhattan distance of all corners compared to a given point
 def min_dist_dots(pos, corners):
     cornerI = 0
     mdpl = util.manhattanDistance(pos, corners[0])
-    for i in range(len(corners)):
-        dpl = util.manhattanDistance(pos, corners[i])
+    for i in corners:
+        dpl = util.manhattanDistance(pos, i)
         if mdpl > dpl:
             mdpl = dpl
-            cornerI = i
+            cornerI = corners.index(i)
     return cornerI, mdpl
 
 def cornersHeuristic(state, problem):
@@ -393,18 +395,17 @@ def cornersHeuristic(state, problem):
     corners = problem.corners # These are the corner coordinates
     walls = problem.walls # These are the walls of the maze, as a Grid (game.py)
 
-    "*** YOUR CODE HERE ***"
-    if problem.isGoalState(state):
+    if problem.isGoalState(state): # goal state handler
         return 0
         
-    corners_visited = list(state[1])
-    cornersToGo = []
-    for i in range(len(corners)):
-        if not(corners_visited[i]):
-            cornersToGo.append(corners[i])
+    corners_visited = list(state[1]) # list of the visited state of all corners
+    cornersToGo = [] # list which will hold all visited corners
+    for i in corners:
+        if not(corners_visited[corners.index(i)]):
+            cornersToGo.append(i)
     
-    cost = 0
-    tempPos = state[0]
+    cost = 0 # cost of the calculated path
+    tempPos = state[0] # current position which needs to be checked
     while (len(cornersToGo) > 0):
 		i, pathlength = min_dist_dots(tempPos, cornersToGo)
 		cost += pathlength
@@ -506,49 +507,17 @@ def foodHeuristic(state, problem):
     position, foodGrid = state
     "*** YOUR CODE HERE ***"
     lijstEten = foodGrid.asList()
+    #controlleren of de goalstate behaalt is
     if (len(lijstEten) == 0):
 		return 0
+    #laagste cost bepalen
     laagstecost = None
     for eten in range(len(lijstEten)):
         afstand = euclid(position, lijstEten[eten])
         if laagstecost == None or laagstecost > afstand:
 			laagstecost = afstand
+    #en returnen
 	return laagstecost
-	
-    """elif (len(lijstEten) == 1):
-		return euclid(position, lijstEten[0])"""
-    """totaal = 0
-    curpos = position
-    while (len(lijstEten) != 0):
-		laagstenode = 0
-		laagstecost = None
-		for eten in range(len(lijstEten)):
-			afstand = euclid(curpos, lijstEten[eten])
-			if laagstecost == None or laagstecost > afstand:
-				laagstecost = afstand
-				laagstenode = lijstEten[eten]
-		totaal += laagstecost
-		curpos = laagstenode
-		lijstEten.remove(laagstenode)
-    return totaal"""
-    
-    
-    """lijstEten = foodGrid.asList()
-    if (len(lijstEten) == 0):
-		return 0
-    totaal = 0
-    curpos = position
-    while (len(lijstEten) != 0):
-		laagstenode = lijstEten[0]
-		laagstecost = euclid(lijstEten[0], curpos)
-		for eten in lijstEten[1:]:
-			if laagstecost > euclid(curpos, eten):
-				laagstecost = euclid(curpos, eten)
-				laagstenode = eten
-		totaal += laagstecost
-		curpos = laagstenode
-		lijstEten.remove(laagstenode)
-    return totaal"""
 
 def euclid(a, b):
     return abs(a[0] - b[0])+ abs(a[1] - b[1])
@@ -582,6 +551,7 @@ class ClosestDotSearchAgent(SearchAgent):
         problem = AnyFoodSearchProblem(gameState)
 
         "*** YOUR CODE HERE ***"
+        #breadthFirstSearch is het best hiervoor
         return search.breadthFirstSearch(problem)
 
 
@@ -617,10 +587,8 @@ class AnyFoodSearchProblem(PositionSearchProblem):
         complete the problem definition.
         """
         x,y = state
-
         "*** YOUR CODE HERE ***"
-        
-
+        #als state in food.asList is is de goalstate bereikt
         return (state in self.food.asList())
 
 def mazeDistance(point1, point2, gameState):
