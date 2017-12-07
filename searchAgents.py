@@ -337,6 +337,7 @@ class CornersProblem(search.SearchProblem):
             if not self.walls[nextx][nexty]:
                 nextState = (nextx, nexty)
                 
+                #checks if a state is one of the corners and handles the situation
                 if nextState in self.corners:
 					tempList = list(state[1])
 					tempList[self.corners.index(nextState)] = True
@@ -367,6 +368,7 @@ class CornersProblem(search.SearchProblem):
             if self.walls[x][y]: return 999999
         return len(actions)
 
+# calculates the smallest manhattan distance of all corners compared to a given point
 def min_dist_dots(pos, corners):
     cornerI = 0
     mdpl = util.manhattanDistance(pos, corners[0])
@@ -393,18 +395,17 @@ def cornersHeuristic(state, problem):
     corners = problem.corners # These are the corner coordinates
     walls = problem.walls # These are the walls of the maze, as a Grid (game.py)
 
-    "*** YOUR CODE HERE ***"
-    if problem.isGoalState(state):
+    if problem.isGoalState(state): # goal state handler
         return 0
         
-    corners_visited = list(state[1])
-    cornersToGo = []
-    for i in range(len(corners)):
-        if not(corners_visited[i]):
-            cornersToGo.append(corners[i])
+    corners_visited = list(state[1]) # list of the visited state of all corners
+    cornersToGo = [] # list which will hold all visited corners
+    for i in corners:
+        if not(corners_visited[corners.index(i)]):
+            cornersToGo.append(i)
     
-    cost = 0
-    tempPos = state[0]
+    cost = 0 # cost of the calculated path
+    tempPos = state[0] # current position which needs to be checked
     while (len(cornersToGo) > 0):
 		i, pathlength = min_dist_dots(tempPos, cornersToGo)
 		cost += pathlength
