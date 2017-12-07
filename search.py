@@ -149,7 +149,7 @@ def uniformCostSearch(problem):
             for successor in problem.getSuccessors(point):
                 if successor[0] not in visited:
                     new_path = path + [successor[1]]
-                priority_queue.push((successor[0], new_path), problem.getCostOfActions(new_path))
+                    priority_queue.push((successor[0], new_path), problem.getCostOfActions(new_path))
 
     print "Goal not found!"
     util.raiseNotDefined()
