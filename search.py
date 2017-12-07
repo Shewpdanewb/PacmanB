@@ -178,7 +178,7 @@ def aStarSearch(problem, heuristic=nullHeuristic):
             for successor in problem.getSuccessors(point):
                 if successor[0] not in visited:
                     new_path = path + [successor[1]]
-                priority_queue.push((successor[0], new_path), heuristic(successor[0], problem) + problem.getCostOfActions(new_path))
+                    priority_queue.push((successor[0], new_path), heuristic(successor[0], problem) + problem.getCostOfActions(new_path))
 
     util.raiseNotDefined()
 
