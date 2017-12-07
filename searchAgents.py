@@ -372,11 +372,11 @@ class CornersProblem(search.SearchProblem):
 def min_dist_dots(pos, corners):
     cornerI = 0
     mdpl = util.manhattanDistance(pos, corners[0])
-    for i in range(len(corners)):
-        dpl = util.manhattanDistance(pos, corners[i])
+    for i in corners:
+        dpl = util.manhattanDistance(pos, i)
         if mdpl > dpl:
             mdpl = dpl
-            cornerI = i
+            cornerI = corners.index(i)
     return cornerI, mdpl
 
 def cornersHeuristic(state, problem):
@@ -507,49 +507,17 @@ def foodHeuristic(state, problem):
     position, foodGrid = state
     "*** YOUR CODE HERE ***"
     lijstEten = foodGrid.asList()
+    #controlleren of de goalstate behaalt is
     if (len(lijstEten) == 0):
 		return 0
+    #laagste cost bepalen
     laagstecost = None
     for eten in range(len(lijstEten)):
         afstand = euclid(position, lijstEten[eten])
         if laagstecost == None or laagstecost > afstand:
 			laagstecost = afstand
+    #en returnen
 	return laagstecost
-	
-    """elif (len(lijstEten) == 1):
-		return euclid(position, lijstEten[0])"""
-    """totaal = 0
-    curpos = position
-    while (len(lijstEten) != 0):
-		laagstenode = 0
-		laagstecost = None
-		for eten in range(len(lijstEten)):
-			afstand = euclid(curpos, lijstEten[eten])
-			if laagstecost == None or laagstecost > afstand:
-				laagstecost = afstand
-				laagstenode = lijstEten[eten]
-		totaal += laagstecost
-		curpos = laagstenode
-		lijstEten.remove(laagstenode)
-    return totaal"""
-    
-    
-    """lijstEten = foodGrid.asList()
-    if (len(lijstEten) == 0):
-		return 0
-    totaal = 0
-    curpos = position
-    while (len(lijstEten) != 0):
-		laagstenode = lijstEten[0]
-		laagstecost = euclid(lijstEten[0], curpos)
-		for eten in lijstEten[1:]:
-			if laagstecost > euclid(curpos, eten):
-				laagstecost = euclid(curpos, eten)
-				laagstenode = eten
-		totaal += laagstecost
-		curpos = laagstenode
-		lijstEten.remove(laagstenode)
-    return totaal"""
 
 def euclid(a, b):
     return abs(a[0] - b[0])+ abs(a[1] - b[1])
@@ -583,6 +551,7 @@ class ClosestDotSearchAgent(SearchAgent):
         problem = AnyFoodSearchProblem(gameState)
 
         "*** YOUR CODE HERE ***"
+        #breadthFirstSearch is het best hiervoor
         return search.breadthFirstSearch(problem)
 
 
@@ -618,10 +587,8 @@ class AnyFoodSearchProblem(PositionSearchProblem):
         complete the problem definition.
         """
         x,y = state
-
         "*** YOUR CODE HERE ***"
-        
-
+        #als state in food.asList is is de goalstate bereikt
         return (state in self.food.asList())
 
 def mazeDistance(point1, point2, gameState):
